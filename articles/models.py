@@ -12,6 +12,7 @@ except ImportError:
 
 from feincms.content.application import models as app_models
 from feincms.models import Base
+from feincms.module.mixins import ContentModelMixin
 from feincms.utils.managers import ActiveAwareContentManagerMixin
 
 
@@ -19,7 +20,7 @@ class ArticleManager(ActiveAwareContentManagerMixin, models.Manager):
     active_filters = {'simple-active': Q(active=True)}
 
 
-class Article(Base):
+class Article(ContentModelMixin, Base):
     active = models.BooleanField(_('active'), default=True)
 
     title = models.CharField(_('title'), max_length=255)
@@ -85,7 +86,7 @@ class ArticleAdmin(ItemEditor, ModelAdmin):
     }
     fieldsets = [
         (None, {
-            'fields': ['active', 'title', 'slug']
+            'fields': ['active', 'title', 'slug', 'category']
         }),
         # <-- insertion point, extensions appear here, see insertion_index above
     ]
